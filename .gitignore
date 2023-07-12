@@ -17,3 +17,4 @@ app/static/uploads/
 # Elasticsearch data
 elasticsearch/data/
 .env
+instance/
