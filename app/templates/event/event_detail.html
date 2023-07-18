@@ -1,1 +1,83 @@
+{% extends "base.html" %} {% block content %}
+<div class="container">
+	<div class="row mt-4 mb-4">
 
+		<section class="col-md-4">
+			<div class="card-deck">
+
+				<div class="card">
+					<img src="{{ url_for('static', filename='img/event_pics/' + event.image) }}" alt="Event Image"
+						class="card-img-top" />
+					<div class="card-body">
+						<h5 class="card-title">{{event.event_name}}</h5>
+						{% if event.organizers[0] == current_user %}
+						<div class="btn-group"><a href="{{ url_for('events.update_event', event_id=event.id)}}"
+								class="btn btn-sm btn-outline-secondary">Edit</a>
+							<button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+								data-bs-target="#deleteModal">Delete</button>
+						</div>
+						{% endif %}
+
+						<a class="card-link small-text"
+							href="{{ url_for('events.user_events', username= event.organizers[0].username, page=page_num) }}">organized
+							by:{{ event.organizers[0].username }}</a>
+
+						<div class="card-dates">
+							<small class="start-date text-danger">On {{ event.start_date.strftime('%B %d, %Y') }}, {{
+								event.start_time.strftime('%I: %M %p')}}
+							</small>
+							<p class="text-muted d-block">At {{event.venue}}</p>
+						</div>
+						<p text-muted> Ticket <span class="btn-group">
+
+								<a href="{{ url_for('ticket.purchase_ticket', event_id=event.id) }}"
+									class="btn btn-sm btn-outline-secondary ">Buy
+								</a>
+								{% if event.organizers[0] == current_user %}
+								<a href="{{ url_for('ticket.new_ticket_type', event_id=event.id) }}"
+									class="btn btn-sm btn-outline-secondary ">Create
+								</a>
+								{% else %}
+								<a href="{{ url_for('events.user_events', username=curent_user)  }}"
+									class="btn btn-sm btn-outline-secondary ">view</a>
+								{% endif %}
+							</span></p>
+
+					</div>
+				</div>
+
+			</div>
+		</section>
+		<div class="event_details col-md-8 ">
+			<h1 class="text-center section-title"> {{event.event_name}} details</h1>
+			<P>{{ event.description }}</P>
+			<p class="text-muted">Starts On: {{ event.start_date.strftime('%B %d, %Y') }} </p>
+			<p class="text-muted">Ends on: {{ event.end_date.strftime('%B %d, %Y') }}</p>
+			<p class="text-muted">Start time: {{ event.start_time.strftime('%I:%M %p') }}</p>
+			<p class="text-muted">End Time: {{ event.end_time.strftime('%I: %M %p') }}</p>
+			<p class="text-muted">Venue: {{ event.venue }}</p>
+			<p class="text-muted">Organizers: {{ event.organizers[0].username }} on contacts </p>
+
+		</div>
+	</div>
+	<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="deleteModalLabel">Delete Event?</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					Are you sure, you want to delete this Event?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+					<form action="{{ url_for('events.delete_event', event_id=event.id) }}" method="POST">
+						<button type="submit" name="delete" value="delete" class="btn btn-danger">Delete</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
