@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, EmailField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Optional
-from app.models.user_model import User
+from app.models.models import User
 
 
 class SignupForm(FlaskForm):
@@ -47,6 +47,6 @@ class LoginForm(FlaskForm):
     It includes basic fields required for a user to log in to their account"""
 
     email = EmailField("Email", validators=[DataRequired(), Email()])
-    password = PasswordField("password", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
     remember_me = BooleanField("Remember Me", validators=[Optional()])
     submit = SubmitField("Log In")
