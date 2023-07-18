@@ -1,1 +1,24 @@
+{% extends "base.html" %}
 
+{%from "error_fields.html" import render_field %}
+
+{% block content %}
+<div class="container">
+	<section class="w-50 m-auto">
+		<h1 class="text-center h5">{{ title }}</h1>
+		<form action="" method="POST">
+			<div class="form-group">
+				{{form.hidden_tag()}}
+			</div>
+			{{ render_field(form.username) }}
+			{{ render_field(form.email) }}
+			{{ render_field(form.password) }}
+			{{ render_field(form.confirm_password) }}
+			<div class="form-group d-flex justify-content-center">
+				{{ form.submit(class="btn btn-outline-success mt-3 mb-3 w-50") }}
+			</div>
+		</form>
+		<a href="{{url_for('user.login')}}">Already with account? <span class="text-success">log In</span></a>
+	</section>
+</div>
+{% endblock %}
