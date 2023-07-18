@@ -18,3 +18,4 @@ app/static/uploads/
 elasticsearch/data/
 .env
 instance/
+migrations/
