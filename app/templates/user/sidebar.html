@@ -1,0 +1,31 @@
+<!-- Sidebar -->
+<div class="bg-light border-right" id="sidebar-wrapper">
+	<div class=" text-center pt-3 pb-3">
+		<img src="{{ url_for('static', filename='img/profile_pics/' + current_user.profile_pic) }}"
+			alt="User profile Picture" class="profile-pic-md rounded-circle m-auto" />
+
+		<h2 class="mb-0">{{ current_user.username }}</h2>
+		<p class="mb-0">{{ current_user.email }}</p>
+	</div>
+	<div class="list-group list-group-flush">
+		<a href="{{ url_for('user.home') }}" class="list-group-item list-group-item-action bg-light">Home</a>
+		<a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
+		<li class="list-group-item list-group-item-light ">
+			<a href="{{ url_for('events.user_events', username=current_user.username) }}" class="nav-link">My
+				Events</a>
+		</li>
+
+		<li class="list-group-item list-group-item-light ">
+			<a href="{{ url_for('user.login') }}" class="nav-link">My
+				tickets</a>
+		</li>
+		<li class="list-group-item list-group-item-light ">
+			<a href="{{ url_for('user.dashboard') }}" class="nav-link">Talk About
+				us</a>
+		</li>
+		<a href="#" class="list-group-item list-group-item-action bg-light">Messages</a>
+		<a href="#" class="list-group-item list-group-item-action bg-light">Settings</a>
+		<a href="#" class="list-group-item list-group-item-action bg-light">Help</a>
+		<a href="#" class="list-group-item list-group-item-action bg-light">Logout</a>
+	</div>
+</div>
