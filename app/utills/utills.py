@@ -21,5 +21,3 @@ def image_saver(image, folder):
         return image_name
     except Exception as e:
         flash(f"An error occurred while saving the image: {e}")
-        print(f"Exception while saving image: {e}")
-        return None
