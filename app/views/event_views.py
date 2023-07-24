@@ -1,3 +1,4 @@
+import os
 from flask import redirect, render_template, flash, url_for, Blueprint, abort, request
 from app.forms.event_forms import EventForm, CategoryForm
 from app.models.models import Event, Category, User, db
@@ -99,7 +100,15 @@ def update_event(event_id):
             category = Category(category_name=category_name)
             db.session.add(category)
             db.session.commit()
+        new_image = form.image.data
+        if new_image is None:
+            new_image = event.image
+        else:
+            if os.path.isfile(event.image):
+                os.remove(event.image)
 
+            new_image = image_saver(new_image, folder="event_pics")
+        event.image = new_image
         event.event_name = form.event_name.data
         event.description = form.description.data
         event.start_date = form.start_date.data
@@ -109,7 +118,7 @@ def update_event(event_id):
         event.venue = form.venue.data
         event.capacity = form.capacity.data
         event.price = form.price.data
-        event.image = image_saver(form.image.data, folder="event_pics")
+
         event.category_id = category.id
         db.session.commit()
         flash("Your event has been Updated!", "success")
