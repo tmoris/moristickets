@@ -6,7 +6,7 @@ from flask_wtf.file import FileField, FileAllowed
 
 class TicketPurchaseForm(FlaskForm):
     ticket_type_id = SelectField(
-        "Ticket Type", coerce=int, id="ticketTypeSelet", validators=[DataRequired()]
+        "Ticket Type", coerce=int, id="ticketTypeSelect", validators=[DataRequired()]
     )
     quantity = IntegerField(
         "Number of Tickets",
@@ -16,7 +16,7 @@ class TicketPurchaseForm(FlaskForm):
             NumberRange(min=1, message="You must purchase at least one ticket"),
         ],
     )
-    amount = StringField("Total Amount", id="amout", render_kw={"readonly": True})
+    amount = StringField("Total Amount", id="amount", render_kw={"readonly": True})
     submit = SubmitField("Pusrchase")
 
 
