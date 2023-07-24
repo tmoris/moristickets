@@ -7,11 +7,12 @@ from flask import (
     request,
     Blueprint,
 )
-from app.forms.user_forms import SignupForm, LoginForm
+from app.forms.user_forms import SignupForm, LoginForm, UpdateAccountForm
 from app.models.models import User, Event
 from flask_login import login_user, logout_user, current_user, login_required
 from app import db
 from werkzeug.urls import url_parse
+from app.utills.utills import image_saver
 
 
 user_bp = Blueprint("user", __name__)
@@ -54,7 +55,7 @@ def register():
         user.hash_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash("Congratulations, You are now a registered!", "Success")
+        flash("Congratulations, You are now a registered!", "success")
         return redirect(url_for("user.login"))
 
     return render_template("user/register.html", form=form, title="Sing up")
@@ -64,7 +65,7 @@ def register():
 @login_required
 def logout():
     logout_user()
-    flash("Sorry to see you! logout!")
+    flash("Sorry to see you! logout!", "info")
     return redirect(url_for("user.login"))
 
 
@@ -74,7 +75,38 @@ def home():
     return render_template("user/home.html", title="User Home", events=events)
 
 
-@user_bp.route("/dashboard")
+@user_bp.route("/profile", methods=["GET", "POST"])
 @login_required
-def dashboard():
-    return render_template("user/dashboard.html", title="Dashboard")
+def profile():
+    updated = session.pop("updated", False)
+    return render_template(
+        "user/user_profile.html", title="User Profile", updated=updated
+    )
+
+
+@user_bp.route("/profile/update", methods=["GET", "POST"])
+@login_required
+def account_update():
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        if form.profile_pic.data:
+            profile_image = image_saver(form.profile_pic.data, folder="profile_pics")
+        else:
+            profile_image = current_user.profile_pic
+
+        current_user.profile_pic = profile_image
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        current_user.bio = form.bio.data
+        db.session.commit()
+        flash("Your account info has been updated successfully", "success")
+        return redirect(url_for("user.profile"))
+    if request.method == "GET":
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+        form.bio.data = current_user.bio
+    return render_template(
+        "user/user_profile.html",
+        form=form,
+        title=f"{current_user.username}'s Account Update",
+    )
