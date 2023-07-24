@@ -16,6 +16,12 @@ app/static/uploads/
 
 # Elasticsearch data
 elasticsearch/data/
+
 .env
+# Images
+img/
+# Instances
 instance/
+
+# migrations
 migrations/
