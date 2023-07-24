@@ -1,0 +1,15 @@
+<section class="w-50 m-auto">
+	<h1 class="text-center h5">{{ title }}</h1>
+	<form action="{{ url_for('user.account_update') }}" method="POST" enctype="multipart/form-data">
+		<div class="form-group">
+			{{form.hidden_tag()}}
+		</div>
+		{{ render_field(form.username) }}
+		{{ render_field(form.email) }}
+		{{ render_field(form.profile_pic) }}
+		{{ render_field(form.bio) }}
+		<div class="form-group d-flex justify-content-center">
+			{{ form.submit(class="btn btn-outline-success mt-3 mb-3 w-50") }}
+		</div>
+	</form>
+</section>
