@@ -9,23 +9,7 @@
 			<div class="form-group">
 				{{form.hidden_tag()}}
 			</div>
-
-			<div class="form-group">
-				<label for="ticketTypeSelect" class="form-control-label">Ticket Type</label>
-				<select name="ticket_type_id" id="ticketTypeSelect" class="form-control">
-					{% for ticket_type in ticket_types %}
-					<option value="{{ ticket_type.id }}" data-price="{{ ticket_type.price }}">{{ ticket_type.ticket_name
-						}}</option>
-					{% endfor %}
-				</select>
-				<!-- Handle form errors for ticket_type_id here -->
-				{% if form.ticket_type_id.errors %}
-				{% for error in form.ticket_type_id.errors %}
-				<div class="invalid-feedback d-block">{{ error }}</div>
-				{% endfor %}
-				{% endif %}
-			</div>
-
+			{{ render_field(form.ticket_type_id) }}
 			{{ render_field(form.quantity) }}
 			{{ render_field(form.amount)}}
 
