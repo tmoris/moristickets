@@ -218,3 +218,19 @@ main {
   inline-size: 4.5rem;
   block-size: 4.5rem;
 }
+#sidebar-wrapper {
+    transform: translateX(-100) !important;
+    display: none;
+  }
+@media (min-width: 768px) {
+  #sidebar-wrapper {
+    transform: translateX(0) !important;
+    display: block;
+  
+  }
+
+  #sidebar-toggler {
+    
+  display: block;
+  }
+}
