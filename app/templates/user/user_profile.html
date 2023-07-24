@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{%from "error_fields.html" import render_field %}
+
+{% block content %}
+
+<div class="container-fluid">
+	<div class="row mt-4 mb-4">
+		<div class=" col-md-3">
+			{% include "user/sidebar.html" %}
+		</div>
+
+		<div class="col-md-9">
+			<div class="account_details container">
+				<div class="row">
+					<div class="col-md-12">
+						<h1 class="text-center"> Personal Profile info </h1>
+						<h2>Info about {{ current_user.username }}</h2>
+						<hr>
+					</div>
+				</div>
+				<div class="row mb-4">
+					<div class="col-md-4">
+
+						<img src="{{ url_for('static', filename='img/profile_pics/' + current_user.profile_pic) }}"
+							alt="User profile Picture" class="profile-pic-md rounded-circle m-auto " />
+						<p>Username: {{ current_user.username }}</p>
+						<p class="mb-0">Email: {{ current_user.email }}</p>
+						<p class="mb-0">Bio: {{ current_user.bio}}</p>
+						<a href="{{ url_for('user.account_update')}}">Update Account</a>
+
+					</div>
+					{% if request.endpoint == 'user.account_update' %}
+					{% include "user/profile_update.html" %}
+
+					{% endif %}
+
+				</div>
+				<div class="row">
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
