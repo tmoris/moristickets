@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+	<div class="row mb-4">
+		<div class="col-md-3">
+			{% include "user/sidebar.html" %}
+		</div>
+		<div class="col-md-9">
+			<section class="container">
+				<h1 class="mb-3 text-center"> {{ title }} </h1>
+				<div class="row">
+					{% for ticket in tickets %}
+					<div class="col-md-4">
+
+						<div class="card mb-4 shadow-sm">
+							{% if ticket.image %}
+							<img class="bd-placeholder-img card-img-top" width="100%" height="225"
+								src="{{ url_for('static', filename='img/ticket_pics/' + ticket.image) }}"
+								preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
+								aria-label="Placeholder: Thumbnail">
+							<title>Placeholder</title>
+							<rect width="100%" height="100%" fill="#55595c"></rect>
+							<text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ ticket.event.name }}</text>
+							</img>
+							{% else %}
+							<img src="{{ url_for('static', filename='img/event_pics/' + ticket.event.image) }}"
+								alt="event image" class="bd-placeholder-img card-img-top" width="100%" height="225"
+								preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
+								aria-label="Placeholder: Thumbnail">
+							{% endif %}
+							<div class="card-body card-text">
+								<p class="mb-0"><strong>Event:</strong> {{ ticket.event.event_name }} </p>
+								<p class="mb-0"><strong>Ticket Type:</strong> {{ ticket.ticket_type }} | {{
+									ticket.ticket_name}}</p>
+								<p class="mb-0"><strong>Ticket Type ID:</strong> {{ ticket.id }}</p>
+								<p class="mb-0"><strong>Date:</strong> <span
+										class="text-danger">{{ticket.event.start_date.strftime('%B
+										%d,
+										%Y')}}</span></p>
+								<p class="card-text small-text mb-0"><strong>Status:</strong> <span
+										class="text-success">{{
+										ticket.status }}</span></p>
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="btn-group">
+										<a href="{{url_for('ticket.purchase_ticket', event_id = ticket.event_id)}}"
+											class="btn btn-sm btn-outline-secondary card-btn">Buy</a>
+									</div>
+									<small class="text-muted">Price: ${{ ticket.price }}</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</section>
+
+		</div>
+	</div>
+</div>
+{% endblock content %}
