@@ -202,6 +202,17 @@ video {
   display: grid;
   grid-template-rows: 1fr auto;
 }
+.logo {
+  font-family: "Spectral", serif;
+ 
+  color: hsl(197, 68%, 11%);
+}
+
+.logo-blue {
+  color: hsl(197, 87%, 56%);
+  text-transform: uppercase;
+}
+
 main {
     padding-top: 80px; 
 }
@@ -218,19 +229,22 @@ main {
   inline-size: 4.5rem;
   block-size: 4.5rem;
 }
+ .open {
+    display: block !important;
+  }
+
 #sidebar-wrapper {
-    transform: translateX(-100) !important;
     display: none;
   }
+
 @media (min-width: 768px) {
   #sidebar-wrapper {
-    transform: translateX(0) !important;
     display: block;
   
   }
 
   #sidebar-toggler {
-    
-  display: block;
+  display: none;
   }
+ 
 }
