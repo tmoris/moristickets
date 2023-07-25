@@ -15,3 +15,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	// Initial update 
 	updateAmount();
 });
+const sidebarBtn = document.getElementById("sidebar-toggler");
+const sidebarWrapper = document.getElementById("sidebar-wrapper");
+sidebarBtn.addEventListener('click', () => {
+	sidebarWrapper.classList.toggle('open');
+});
+
