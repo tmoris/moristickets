@@ -70,6 +70,7 @@ def logout():
 
 
 @user_bp.route("/home", methods=["GET", "POST"])
+@login_required
 def home():
     events = Event.query.all()
     return render_template("user/home.html", title="User Home", events=events)
