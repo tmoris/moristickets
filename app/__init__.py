@@ -32,11 +32,13 @@ def create_app(config_class=Config):
     from app.views.user_views import user_bp
     from app.views.event_views import event_bp
     from app.views.ticket_views import ticket_bp
+    from app.errors.error_handler import errors as error_bp
 
     # Register blueprint
     app.register_blueprint(user_bp)
     app.register_blueprint(event_bp)
     app.register_blueprint(ticket_bp)
+    app.register_blueprint(error_bp)
 
     # Database creating context
     with app.app_context():
