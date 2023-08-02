@@ -1,0 +1,654 @@
+{% extends 'base.html' %} {% block content %} {%from "error_fields.html" import
+render_field %}
+
+<section class="hero">
+  <!-- Hero section content -->
+  <video autoplay muted loop>
+    <source
+      src="{{ url_for('static', filename='img/preparations.mp4') }}"
+      type="video/mp4"
+    />
+  </video>
+  <img src="{{ url_for('static', filename='img/event1.jpg')}}" alt="" />
+  <div class="hero-content">
+    <h1 class="hero-title">Unleash Your Social Life with Amazing Events</h1>
+    <p class="hero-txt">
+      Connect with your passions, meet like-minded people, and create
+      unforgettable memories with our easy-to-navigate event platform
+    </p>
+    <a
+      href="{{ url_for('events.list_events') }}"
+      class="btn btn-outline-info cta-button m-2"
+      >Events</a
+    >
+    <a
+      href="{{ url_for('user.register') }}"
+      class="btn btn-outline-info btn-2 m-2"
+      >Sign Up</a
+    >
+  </div>
+  <div class="overlay"></div>
+</section>
+
+<!-- Event Showcase section content  -->
+<div class="event-showcase">
+  <section class="event-search">
+    <div class="container" data-aos="zoom-in">
+      <h2 class="section-title text-center">Browse events by:</h2>
+      <form action="{{ url_for('events.list_events') }}" method="GET">
+        <div class="row">
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="form-group">
+              <label for="category" class="form-select-label"
+                ><span class="text-info h2 pe-2">1</span>Category</label
+              >
+              <select name="category" id="category" class="form-select">
+                <option value="">All Categories</option>
+                {% for category in categories %}
+                <option value="{{category.name}}">{{category.name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="form-group">
+              <label for="date" class="form-control-label"
+                ><span class="text-info h2 pe-2">2</span>Date</label
+              >
+              <input type="date" name="date" id="date" class="form-control" />
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="form-group">
+              <label for="location" class="form-control-label"
+                ><span class="text-info h2 pe-2">3</span>Location</label
+              >
+              <input
+                type="text"
+                name="location"
+                id="location"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-md-3 d-flex align-items-end">
+            <div class="form-group w-100">
+              <button type="submit" class="btn btn-outline-info w-100">
+                Search
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+  <section class="container events-section" data-aos="zoom-in">
+    <h2 class="section-title text-center">Events</h2>
+
+    <div class="row">
+      {% for event in events %}
+      <div class="col-sm-6 col-md-4">
+        <div class="card m-auto mb-4">
+          <img
+            src="{{ url_for('static', filename='img/event_pics/' + event.image) }}"
+            alt="Event Image"
+            class="card-img-top"
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{event.event_name}}</h5>
+            {% if event.organizers[0] == current_user %}
+            <div class="btn-group">
+              <a
+                href="{{ url_for('events.update_event', event_id=event.id)}}"
+                class="btn btn-sm btn-outline-secondary border-0"
+                >Edit</a
+              >
+              <button
+                class="btn btn-sm btn-outline-danger border-0"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteModal"
+              >
+                Delete
+              </button>
+            </div>
+            {% endif %}
+
+            <p class="start-date text-danger small-text mb-1">
+              On {{ event.start_date.strftime('%B %d, %Y') }}, {{
+              event.start_time.strftime('%I:%M %p') }}
+            </p>
+            <p class="small-text text-muted mb-1">{{event.venue}}</p>
+            <p text-muted>
+              Ticket
+              <span class="btn-group">
+                <a
+                  href="{{ url_for('ticket.purchase_ticket', event_id=event.id) }}"
+                  class="btn btn-sm btn-outline-secondary border-0"
+                  >Buy
+                </a>
+                {% if event.organizers[0] == current_user %}
+                <a
+                  href="{{ url_for('ticket.new_ticket_type', event_id=event.id) }}"
+                  class="btn btn-sm btn-outline-secondary border-0"
+                  >Create
+                </a>
+                <a
+                  href="{{ url_for('ticket.get_ticket_types', event_id=event.id)  }}"
+                  class="btn btn-sm btn-outline-secondary border-0"
+                  >view</a
+                >
+                {% else %}
+                <a
+                  href="{{ url_for('ticket.get_ticket_types', event_id=event.id)  }}"
+                  class="btn btn-sm btn-outline-secondary border-0"
+                  >view</a
+                >
+                {% endif %}
+              </span>
+            </p>
+            <a
+              class="card-link"
+              href="{{ url_for('events.user_events', username= event.organizers[0].username, page=page_num) }}"
+              >Organized by: {{ event.organizers[0].username }}</a
+            >
+
+            <a
+              href="{{url_for('events.event_detail', event_id =event.id )}}"
+              class="card-link"
+              >Read more</a
+            >
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<section class="features">
+  <div class="container text-center m-auto" data-aos="zoom-in">
+    <h2 class="section-title text-center">Key Features</h2>
+    <div class="row pt-3 pb-3">
+      <div class="feature col-sm-6 col-md-4 col-lg-3 mb-4 m-auto">
+        <i class="fas fa-calendar-alt"></i>
+        <h3 class="feature-title h3 text-center">Event Calendar</h3>
+        <p class="feature-description">
+          Stay organized and never miss an event with our interactive event
+          calendar. Easily view upcoming events, filter by date or category, and
+          add events to your personal schedule.
+        </p>
+      </div>
+      <div class="feature col-sm-6 col-md-4 col-lg-3 mb-4 m-auto">
+        <i class="fas fa-ticket-alt"></i>
+        <h3 class="feature-title h3">Ticketing System</h3>
+        <p class="feature-description">
+          Effortlessly purchase tickets for your favorite events. Our secure
+          ticketing system allows for easy payment processing, instant ticket
+          delivery, and seamless check-in at the event.
+        </p>
+      </div>
+      <div class="feature col-sm-6 col-md-4 col-lg-3 m-auto">
+        <i class="fas fa-heart"></i>
+        <h3 class="feature-title h3">Personalized Recommendations</h3>
+        <p class="feature-description">
+          Discover events tailored to your interests with our personalized
+          recommendation engine. Based on your past event attendance and
+          preferences, we curate a selection of events just for you.
+        </p>
+      </div>
+      <div class="feature col-sm-6 col-md-4 col-lg-3 m-auto">
+        <i class="fas fa-users"></i>
+        <h3 class="feature-title h3">Join the Community</h3>
+        <p class="feature-description">
+          Join our vibrant community of event-goers and organizers.Discover new
+          interests, share experiences and make new connections.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section id="testimonials" class="testimonials py-5 bg-light">
+  <div class="container" data-aos="zoom-in">
+    <h2 class="section-title text-center mb-5">Testimonials</h2>
+    <div
+      id="testimonialCarousel"
+      class="carousel slide m-auto"
+      data-bs-ride="carousel"
+    >
+      <div class="carousel-inner">
+        {% for testimonial in testimonials %}
+        <div class="carousel-item {% if loop.first %}active{% endif %}">
+          <div class="testimonial card mx-auto" style="max-width: 600px;">
+            <img
+              src="{{ url_for('static', filename='img/profile_pics/' + testimonial.author.profile_pic) }}"
+              alt="Testimonial Image"
+              class="profile-pic-md rounded-circle m-auto mt-4"
+            />
+
+            <div class="card-body">
+              <p class="testimonial-text card-text text-center">
+                "{{ testimonial.testimony }}"
+              </p>
+              <p
+                class="testimonial-author card-subtitle mb-2 text-muted text-center"
+              >
+                {{ testimonial.author.username }}, {{ testimonial.author_role }}
+              </p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#testimonialCarousel"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#testimonialCarousel"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Partners section
+<section class="partners-section">
+  <div class="container" data-aos="zoom-in">
+    <h2 class="section-title text-center">Our Partners and Sponsors</h2>
+    <div class="partners-list">
+      <div class="partner">
+        <img
+          src="{{ url_for('static', filename='img/event.jpg') }}"
+          alt="Partner 1"
+        />
+      </div>
+      <div class="partner">
+        <img
+          src="{{ url_for('static', filename='img/online_event.jpg') }}"
+          alt="Partner 2"
+        />
+      </div>
+      <div class="partner">
+        <img
+          src="{{ url_for('static', filename='img/event1.jpg')}}"
+          alt="Partner 3"
+        />
+      </div>
+    </div>
+  </div>
+</section> -->
+
+<!-- Pricing section -->
+<section class="pricing-section">
+  <div class="container" data-aos="zoom-in">
+    <h2 class="section-title text-center">Pricing</h2>
+    <div class="pricing-plans row gap-2">
+      <div class="pricing-plan col-md-4">
+        <h3 class="plan-name">Basic</h3>
+        <p class="plan-price">Free</p>
+        <ul class="plan-features">
+          <li>Event creation and management</li>
+          <li>Attendee registration</li>
+          <li>Basic event analytics</li>
+          <li>Email support</li>
+        </ul>
+        <a href="#" class="plan-button">Choose Plan</a>
+      </div>
+      <div class="pricing-plan col-md-4">
+        <h3 class="plan-name">Pro</h3>
+        <p class="plan-price">$39.99/month</p>
+        <ul class="plan-features">
+          <li>All Basic features</li>
+          <li>Advanced event analytics</li>
+          <li>Customizable registration forms</li>
+          <li>Priority email support</li>
+        </ul>
+        <a href="#" class="plan-button">Choose Plan</a>
+      </div>
+      <div class="pricing-plan col-md-4">
+        <h3 class="plan-name">Enterprise</h3>
+        <p class="plan-price">$99.99/month</p>
+        <ul class="plan-features">
+          <li>All Standard features</li>
+          <li>Event promotion tools</li>
+          <li>Ticketing features</li>
+          <li>Dedicated account manager</li>
+          <li>24/7 phone and email support</li>
+        </ul>
+        <a href="#" class="plan-button">Choose Plan</a>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- FAQ section  -->
+<section class="faq-section" id="faq">
+  <div class="container" data-aos="zoom-in">
+    <h2 class="section-title text-center">FAQ</h2>
+    <p class="m-auto">Click on Question to see the answer</p>
+    <div class="faq-accordion">
+      <div class="accordion-item">
+        <div
+          class="accordion-question"
+          data-bs-toggle="collapse"
+          data-bs-target="#accordion-answer1"
+          aria-expanded="false"
+          aria-controls="accordion-answer1"
+        >
+          Question 1: How do I create an event?
+        </div>
+        <div class="collapse collapse-vertical p-3" id="accordion-answer1">
+          Answer: To create an event, simply navigate to the "Create Event" page
+          and fill in the required details such as event name, date, location,
+          description, and any other relevant information. Once submitted, your
+          event will be listed on the platform for others to discover and
+          register.
+        </div>
+      </div>
+      <div class="accordion-item">
+        <div
+          class="accordion-question"
+          data-bs-toggle="collapse"
+          data-bs-target="#accordion-answer2"
+          aria-expanded="false"
+          aria-controls="accordion-answer2"
+        >
+          Question 2: Can I edit the details of my event after it has been
+          created?
+        </div>
+        <div class="collapse collapse-vertical p-3" id="accordion-answer2">
+          Answer: Yes, you can edit the details of your event at any time.
+          Simply go to the "My Events" section, locate the event you want to
+          edit, and click on the edit button. You can update the event's
+          details, img, dates, and any other information as needed.
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div
+          class="accordion-question"
+          data-bs-toggle="collapse"
+          data-bs-target="#accordion-answer3"
+          aria-expanded="false"
+          aria-controls="accordion-answer3"
+        >
+          Question 3: How can I register for an event?
+        </div>
+        <div class="collapse collapse-vertical p-3" id="accordion-answer3">
+          Answer: To register for an event, navigate to the event's page and
+          click on the "Register" button. You will be prompted to provide your
+          contact information and complete the registration process. Once
+          registered, you will receive a confirmation email with further
+          details.
+        </div>
+      </div>
+      <div class="accordion-item">
+        <div
+          class="accordion-question"
+          data-bs-toggle="collapse"
+          data-bs-target="#accordion-answer4"
+          aria-expanded="false"
+          aria-controls="accordion-answer4"
+        >
+          Question 4: What payment methods are accepted for event registration?
+        </div>
+        <div class="collapse collapse-vertical p-3" id="accordion-answer4">
+          Answer: We accept various payment methods, including credit cards,
+          debit cards, and online payment platforms such as PayPal. During the
+          registration process, you will be prompted to select your preferred
+          payment method and proceed with the payment?
+        </div>
+      </div>
+      <div class="accordion-item">
+        <div
+          class="accordion-question"
+          data-bs-toggle="collapse"
+          data-bs-target="#accordion-answer5"
+          aria-expanded="false"
+          aria-controls="accordion-answer5"
+        >
+          Question 5: Can I cancel my event registration and get a refund?
+        </div>
+        <div class="collapse collapse-vertical p-3" id="accordion-answer5">
+          Answer: Event cancellation and refund policies may vary depending on
+          the event organizer. We recommend reviewing the event's terms and
+          conditions or contacting the organizer directly for information on
+          cancellation and refund requests.
+        </div>
+      </div>
+      <div class="accordion-item">
+        <div
+          class="accordion-question"
+          data-bs-toggle="collapse"
+          data-bs-target="#accordion-answer6"
+          aria-expanded="false"
+          aria-controls="accordion-answer6"
+        >
+          Question 6: How can I contact the event organizer for further
+          inquiries?
+        </div>
+        <div class="collapse collapse-vertical p-3" id="accordion-answer6">
+          Answer: On the event's page, you will find the organizer's contact
+          information, including their email address or phone number. Feel free
+          to reach out to them with any questions or concerns you may have
+          regarding the event.
+        </div>
+      </div>
+      <div class="accordion-item">
+        <div
+          class="accordion-question"
+          data-bs-toggle="collapse"
+          data-bs-target="#accordion-answer7"
+          aria-expanded="false"
+          aria-controls="accordion-answer7"
+        >
+          Question 7: Is there a mobile app available for this platform?
+        </div>
+        <div class="collapse collapse-vertical p-3" id="accordion-answer7">
+          Answer: Currently, we do not have a dedicated mobile app. However, our
+          platform is mobile-responsive, allowing you to access and use it
+          conveniently on your smartphone or tablet through a web browser.
+        </div>
+      </div>
+      <div class="accordion-item">
+        <div
+          class="accordion-question"
+          data-bs-toggle="collapse"
+          data-bs-target="#accordion-answer8"
+          aria-expanded="false"
+          aria-controls="accordion-answer8"
+        >
+          Question 8: How can I provide feedback or report an issue with the
+          platform?
+        </div>
+        <div class="collapse collapse-vertical p-3" id="accordion-answer8">
+          AnswerA: We value your feedback and appreciate your help in improving
+          our platform. You can reach out to our support team by sending an
+          email to support@tibevents.com. Please describe the issue or provide
+          details of your feedback, and we will assist you accordingly.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Resource Section or Blog -->
+<section id="resources" class="blog-section py-5">
+  <div class="container" data-aos="zoom-in">
+    <h2 class="section-title text-center mb-4">Resources</h2>
+    <p class="m-auto pb-4">
+      Explore our latest articles and resources about our event platform.
+    </p>
+    <div class="row">
+      <div class="col-md-6 col-lg-4 pb-3">
+        <div class="card h-100 m-auto">
+          <img
+            src="{{ url_for('static', filename='img/event.jpg')}}"
+            alt="Article 1"
+            class="card-img-top img-fluid"
+          />
+          <div class="card-body card-text">
+            <h3 class="card-title">
+              Getting Started with Our Event Platform
+            </h3>
+            <p class="resource-description">
+              Learn how to kickstart your event planning journey using our
+              powerful event platform.
+            </p>
+            <a href="#" class="btn btn-outline-info w-100">Read More</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 pb-3">
+        <div class="card h-100 m-auto">
+          <img
+            src="{{ url_for('static',filename='img/online_event.jpg') }}"
+            alt="Article 2"
+            class="card-img-top img-fluid"
+          />
+          <div class="card-body card-text">
+            <h3 class="resource-title card-title">
+              10 Tips for Hosting Successful Virtual Events
+            </h3>
+            <p class="resource-description card-text">
+              Discover expert tips and best practices to host engaging and
+              successful virtual events.
+            </p>
+            <a href="#" class="btn btn-outline-info w-100">Read More</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 pb-3">
+        <div class="resource-card card h-100 m-auto">
+          <img
+            src="{{ url_for('static', filename='img/event1.jpg')}}"
+            alt="Article 3"
+            class="card-img-top img-fluid"
+          />
+          <div class="card-body card-text">
+            <h3 class="card-title">
+              Maximizing Event Registrations: Strategies and Tactics
+            </h3>
+            <p class="resource-description">
+              Learn proven strategies and tactics to boost event registrations
+              and drive attendance.
+            </p>
+            <a href="#" class="btn btn-outline-info w-100">Read More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="contact-section">
+  <img
+    src="{{ url_for('static', filename='img/event1.jpg')}}"
+    alt=""
+    class="contact-image"
+  />
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="contact-body" data-aos="zoom-in">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <h2 class="section-title">Contact Us</h2>
+            <hr />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <h3>Our Contact Info</h3>
+            <p>
+              <strong class="logo text-white">Tib Events</strong><br />
+              134 William Street Rd.<br />
+              Kampala City, Uganda, EA <br />
+              <abbr title="Phone">P:</abbr> (+256) 777-261169
+            </p>
+            <p>
+              <abbr title="Email">E:</abbr>
+              <a href="mailto:info@tibevents.com" class="text-white"
+                >info@tibevents.com</a
+              >
+            </p>
+          </div>
+          <div class="col-md-8">
+            <h3>Send us a message</h3>
+            <form action="{{ url_for('user.homepage') }}" method="post">
+              {{ contact_form.hidden_tag() }} {{render_field(contact_form.name)}}
+               {{render_field(contact_form.email)}}
+               {{render_field(contact_form.message)}}
+               <div class="form-group d-flex justify-content-center">
+				{{ contact_form.submit(class="btn btn-outline-dark mt-3 mb-3 w-50") }}
+			</div>
+            </form>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% for event in events.items %}
+<div
+  class="modal fade"
+  id="deleteModal"
+  tabindex="-1"
+  aria-labelledby="deleteModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deleteModalLabel">Delete Event?</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        Are you sure, you want to delete this Event?
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-secondary border-0"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+        <form
+          action="{{ url_for('events.delete_event', event_id=event.id) }}"
+          method="POST"
+        >
+          <button
+            type="submit"
+            name="delete"
+            value="delete"
+            class="btn btn-danger"
+          >
+            Delete
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %} {% endblock %}
