@@ -237,42 +237,36 @@ def new_ticket_type(event_id):
     form = TicketTypeForm()
 
     if form.validate_on_submit():
-        try:
-            existing_ticket_type = TicketType.query.filter_by(
-                event_id=event.id, ticket_type=form.ticket_type.data
-            ).first()
+        existing_ticket_type = TicketType.query.filter_by(
+            event_id=event.id, ticket_type=form.ticket_type.data
+        ).first()
 
-            if existing_ticket_type:
-                flash(
-                    "You have already created this ticket_type for this event.", "info"
+        if existing_ticket_type:
+            flash("You have already created this ticket_type for this event.", "info")
+            return redirect(
+                url_for(
+                    "ticket.ticket_type_detail",
+                    ticket_type_id=existing_ticket_type.id,
                 )
-                return redirect(
-                    url_for(
-                        "ticket.ticket_type_detail",
-                        ticket_type_id=existing_ticket_type.id,
-                    )
-                )
+            )
 
-            else:
-                image_file = image_saver(form.image.data, folder="ticket_pics")
-                ticket_type = TicketType(
-                    ticket_name=form.ticket_name.data,
-                    ticket_type=form.ticket_type.data,
-                    price=form.price.data,
-                    quantity=form.quantity.data,
-                    status=form.status.data,
-                    image=image_file,
-                    event_id=event.id,
-                )
-                db.session.add(ticket_type)
-                db.session.commit()
-                flash("The ticket type has been created!", "success")
-                return redirect(
-                    url_for("ticket.ticket_type_detail", ticket_id=ticket_type.id)
-                )
-        except Exception as e:
-            db.session.rollback()
-            flash(str(e), "error")
+        else:
+            image_file = image_saver(form.image.data, folder="ticket_pics")
+            ticket_type = TicketType(
+                ticket_name=form.ticket_name.data,
+                ticket_type=form.ticket_type.data,
+                price=form.price.data,
+                quantity=form.quantity.data,
+                status=form.status.data,
+                image=image_file,
+                event_id=event.id,
+            )
+            db.session.add(ticket_type)
+            db.session.commit()
+            flash("The ticket type has been created!", "success")
+            return redirect(
+                url_for("ticket.ticket_type_detail", ticket_id=ticket_type.id)
+            )
 
     return render_template(
         "ticket/create_ticket_type.html",
