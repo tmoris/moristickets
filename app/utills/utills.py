@@ -1,7 +1,8 @@
 import os
 import secrets
 from PIL import Image
-from flask import current_app, flash
+from flask import current_app, flash, jsonify
+from app.models.models import Contact, db
 
 
 def image_saver(image, folder):
@@ -21,3 +22,21 @@ def image_saver(image, folder):
         return image_name
     except Exception as e:
         flash(f"An error occurred while saving the image: {e}")
+
+
+def process_contact_form(form):
+    if form.validate_on_submit():
+        new_contact = Contact(
+            name=form.name.data, email=form.email.data, message=form.message.data
+        )
+        db.session.add(new_contact)
+        db.session.commit()
+        return (
+            jsonify(
+                {"message:" "Thank you for your message! We will get back to you soon."}
+            ),
+            200,
+        )
+    else:
+        print(form.error)
+    return jsonify({"message": "An error occurred. Please try again."}), 400
