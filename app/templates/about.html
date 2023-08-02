@@ -1,0 +1,116 @@
+{% extends "base.html" %} {% block content %}
+{% from "error_fields.html" import render_field %}
+<div class="container">
+  <section class="about mt-4 mb-4">
+    <h1 class="section-title text-center">About Us</h1>
+    <p class="m-auto">
+      Welcome to Our Event Platform! We are a dedicated team of event
+      enthusiasts.
+    </p>
+    <div class="container">
+      <div class="row p-3 justify-content-center pt-4 pb-4">
+        <div class="about-img-section col-md-6">
+          <img src="{{ url_for('static', filename='img/publish_event.svg')}}" alt="Publish event image" />
+        </div>
+        <div class="about-text col-md-6">
+          <h2 class="text-center h4">Our Mission</h2>
+          <p>
+            Our mission is to connect people through events. We believe that
+            events are a great way for people to network, learn and have fun.
+            Our platform makes it easy for event organizers to create, manage
+            and promote their events. We also provide a platform for attendees
+            to discover new events, buy tickets, and share their experiences.
+          </p>
+
+          <h3 class="text-center h4">Our Team</h3>
+          <p>
+            Our team is made up of passionate individuals with diverse
+            backgrounds and skills. From event planning and customer service to
+            software development and marketing, our team is committed to
+            providing the best experience for our users.
+          </p>
+
+          <h3 class="text-center h4">Our Project</h3>
+          <p>
+            This project started as a simple idea: to create a platform where
+            event organizers and attendees could connect. Today, our platform
+            hosts a wide variety of events, from small meetups and workshops to
+            large conferences and festivals. We are constantly working to
+            improve our platform and add new features, so stay tuned for
+            updates!
+          </p>
+
+          <p>Thanks for visiting!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="row">
+    <div class="container">
+      <section class="col-md-12" id="contact">
+        <h2 class="section-title text-center">Contact Us</h2>
+        <p class="m-auto">
+          We're here to help and answer any question you might have. We look
+          forward to hearing from you 🙌
+        </p>
+        <hr />
+        <div class="row">
+          <div class="contact-info col-12 col-sm-6 col-md-4">
+            <h3 class="h4">General Inquiries</h3>
+            <p>
+              Please reach out to our team with any general questions about our
+              platform or services. Email us at
+              <a href="mailto:support@tibenvents.com" class="text-info">support@tibenvents.com</a>.
+            </p>
+          </div>
+          <div class="contact-info col-12 col-sm-6 col-md-4">
+            <h3 class="h4">Technical Support</h3>
+            <p>
+              Experiencing technical issues? No problem. Our support team is
+              ready to help you navigate our platform smoothly. Contact us at
+              <a href="mailto:techsupport@tibenvents.com" class="text-info">techsupport@tibenvents.com</a>.
+            </p>
+          </div>
+          <div class="contact-info col-12 col-sm-6 col-md-4">
+            <h3 class="h4">Event Organizers</h3>
+            <p>
+              If you are an event organizer and have questions about using our
+              platform or setting up your event, we're here to help. Contact us
+              at
+              <a href="mailto:organizersupport@tibenvents.com" class="text-info">organizersupport@tibevents.com</a>.
+            </p>
+          </div>
+        </div>
+      </section>
+      <hr />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <h3 class="text-center h4">Our Contact Info</h3>
+      <p>
+        <strong class="logo">TibEvents</strong><br />
+        134 William Street Rd.<br />
+        Kampala City, Uganda, EA <br />
+        <abbr title="Phone">P:</abbr> (+256) 777-261169
+      </p>
+      <p>
+        <abbr title="Email">E:</abbr>
+        <a href="mailto:info@tibevents.com" class="text-info">info@tibevents.com</a>
+      </p>
+    </div>
+    <div class="col-md-8">
+      <h3 class="text-center h4">Send us a message</h3>
+      <form action="{{ url_for('user.about') }}" method="post">
+        {{ contact_form.hidden_tag() }} {{render_field(contact_form.name)}}
+        {{render_field(contact_form.email)}}
+        {{render_field(contact_form.message)}}
+        <div class="form-group d-flex justify-content-center">
+          {{ contact_form.submit(class="btn btn-outline-info mt-3 mb-3 w-50") }}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
