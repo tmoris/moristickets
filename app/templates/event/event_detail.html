@@ -9,8 +9,8 @@
             alt="Event Image"
             class="card-img-top"
           />
-          <div class="card-body">
-            <h5 class="card-title">{{event.event_name}}</h5>
+          <div class="card-body card-text">
+            <h3 class="card-title">{{event.event_name}}</h3>
             {% if event.organizers[0] == current_user %}
             <div class="btn-group">
               <a
