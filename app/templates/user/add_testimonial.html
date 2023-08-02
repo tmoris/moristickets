@@ -1,0 +1,17 @@
+{% extends "base.html" %} {%from "error_fields.html" import render_field %} {%
+block content %}
+<div class="container">
+  <section class="w-50 m-auto mt-4 mb-4">
+    <h1 class="text-center h5">{{ title }}</h1>
+    <form action="" method="POST">
+      <div class="form-group">
+        {{form.hidden_tag()}}
+      </div>
+      {{ render_field(form.testimony) }} {{ render_field(form.role) }}
+      <div class="form-group d-flex justify-content-center">
+        {{ form.submit(class="btn btn-outline-info mt-3 mb-3 w-50") }}
+      </div>
+    </form>
+  </section>
+</div>
+{% endblock %}
