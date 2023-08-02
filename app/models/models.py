@@ -29,6 +29,14 @@ class Role(db.Model):
     users = db.relationship("User", backref="role", lazy="dynamic")
 
 
+# Association table between the User and Role models.
+roles_users = db.Table(
+    "roles_users",
+    db.Column("user_id", db.Integer(), db.ForeignKey("user.id")),
+    db.Column("role_id", db.Integer(), db.ForeignKey("role.id")),
+)
+
+
 organizers = db.Table(
     "organizers",
     db.Column("user_id", db.Integer, db.ForeignKey("user.id"), primary_key=True),
@@ -111,7 +119,13 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     profile_pic = db.Column(db.String(128), default="default.jpg")
     bio = db.Column(db.Text)
+    phone_number = db.Column(db.String(20), nullable=True)
+    address = db.Column(db.String(120), nullable=True)
+    company_name = db.Column(db.String(100), nullable=True)
+    company_logo = db.Column(db.String(120), nullable=True, default="default.jpg")
+    balance = db.Column(db.Float, default=0.0)
     role_id = db.Column(db.Integer, db.ForeignKey("role.id"))
+    testimonials = db.relationship("Testimonial", backref="author", lazy="dynamic")
 
     def hash_password(self, password):
         """
@@ -128,6 +142,33 @@ class User(UserMixin, db.Model):
         password (str): The password to check
         """
         return check_password_hash(self.password_hash, password)
+
+    def can_purchase(self, amount):
+        """
+        Checks whether the user's balance is sufficient to make a purchase.
+
+        Args:
+            amount (float): The amount required to make a purchase.
+
+        Returns:
+            bool: True if the user has sufficient balance, False otherwise.
+        """
+        return self.balance >= amount
+
+    def deduct_balance(self, amount):
+        """
+        Deducts the specified amount from the user's balance if they have sufficient funds.
+
+        Args:
+            amount (float): The amount to deduct.
+
+        Returns:
+            bool: True if the balance was successfully deducted, False otherwise.
+        """
+        if self.can_purchase(amount):
+            self.balance -= amount
+            return True
+        return False
 
 
 class TicketType(db.Model):
@@ -217,3 +258,55 @@ class Category(db.Model):
 
     def __repr__(self):
         return f"Category('{self.category_name}')"
+
+
+class Testimonial(db.Model):
+    """Model representing a testimonial given by a user."""
+
+    d = db.Column(db.Integer, primary_key=True)
+    testimony = db.Column(db.Text, nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    author_role = db.Column(db.String(50), nullable=False)
+
+
+class Contact(db.Model):
+    """
+    Model representing a contact entry. Each entry has a unique id.
+    """
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    message = db.Column(db.String(500), nullable=False)
+
+
+class Transactions(db.Model):
+    """
+    Model representing a transaction. Each transaction is associated with a user, ticket, and event.
+    """
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    ticket_id = db.Column(db.Integer, db.ForeignKey("ticket.id"))
+    event_id = db.Column(db.Integer, db.ForeignKey("event.id"))
+    status = db.Column(
+        Enum("COMPLETED", "FAILED", "PENDING"), nullable=False, default="PENDING"
+    )
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+    quantity = db.Column(db.Integer)
+    price_per_ticket = db.Column(db.Float)
+    total_price = db.Column(db.Float)
+    payment_method = db.Column(db.String(100))
+    payment_detail = db.Column(db.String(120))
+    refund_status = db.Column(db.String(50))
+    payment_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    @property
+    def validate_total_price(self):
+        """
+        Validates that the total price matches the product of quantity and price per ticket.
+
+        Returns:
+            bool: True if total price is correct, False otherwise.
+        """
+        return self.total_price == self.quantity * self.price_per_ticket
