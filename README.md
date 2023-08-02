@@ -43,8 +43,8 @@ Welcome to the repository for my event marketing and ticketing system project. T
 
 ## Installation and Usage
 
-1. Clone this repository: `git clone https://github.com/tmoris/ticketing-system.git`.
-2. Navigate to the project directory: `cd ticketing-system`.
+1. Clone this repository: `git clone https://github.com/tmoris/tibevents.git`.
+2. Navigate to the project directory: `cd ticketing_system`.
 3. Create a virtual environment: `python -m venv venv`.
 4. Activate the virtual environment:
    - On Windows: `venv\Scripts\activate`
