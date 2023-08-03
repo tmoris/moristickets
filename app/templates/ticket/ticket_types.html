@@ -5,13 +5,13 @@
 {% block content %}
 
 <div class="container-fluid">
-	<div class="row mb-4">
+	<div class="row mt-4 mb-4">
 		<div class="col-md-3">
 			{% include "user/sidebar.html" %}
 		</div>
 		<div class="col-md-9">
 			<section class="container">
-				<h1 class="mb-3 text-center"> {{ title }} </h1>
+				<h1 class="mb-3 text-center h3"> {{ title }} </h1>
 				<div class="row">
 					{% for ticket_type in ticket_types %}
 					<div class="col-md-4">
@@ -30,7 +30,8 @@
 								aria-label="Placeholder: Thumbnail">
 							{% endif %}
 							<div class="card-body card-text">
-								<p class="mb-0"><strong>Event:</strong> {{ ticket_type.event.event_name }}</p>
+								<p class="mb-0 card-title"><strong>Event:</strong> {{ ticket_type.event.event_name }}
+								</p>
 								</p>
 								<p class="mb-0"><strong>Ticket Type :</strong> {{ ticket_type.ticket_type}}</p>
 
@@ -40,10 +41,9 @@
 										class="text-danger">{{ticket_type.event.start_date.strftime('%B
 										%d,
 										%Y')}}</span></p>
-								<p class="card-text small-text mb-0"><strong>Status:</strong> <span
-										class="text-success">{{
+								<p class=" small-text mb-0"><strong>Status:</strong> <span class="text-success">{{
 										ticket_type.status }}</span></p>
-								<p class="card-text small-text mb-0"><strong>Available Tickets:</strong> <span
+								<p class=" small-text mb-0"><strong>Available Tickets:</strong> <span
 										class="text-success">{{
 										ticket_type.quantity}}</span></p>
 								<div class="d-flex justify-content-between align-items-center">
