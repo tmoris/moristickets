@@ -40,24 +40,24 @@
                   {{ event.start_date.strftime('%B %d, %Y') }}, {{
                   event.start_time.strftime('%I:%M %p') }}
                 </p>
-                <p class="small-text text-muted mb-1">{{event.venue}}</p>
-                <p text-muted>
+                <p class="small-text text-muted mb-0">{{event.venue}}</p>
+                <p class="text-muted mb-0">
                   Ticket
                   <span class="btn-group">
                     <a
                       href="{{ url_for('ticket.purchase_ticket', event_id=event.id) }}"
-                      class="btn btn-sm btn-outline-secondary border-0"
+                      class="btn btn-sm btn-outline-secondary border-0 mb-0"
                       >Buy
                     </a>
                     {% if event.organizers[0] == current_user %}
                     <a
                       href="{{ url_for('ticket.new_ticket_type', event_id=event.id) }}"
-                      class="btn btn-sm btn-outline-secondary border-0"
+                      class="btn btn-sm btn-outline-secondary border-0 mb-0"
                       >Create
                     </a>
                     <a
                       href="{{ url_for('ticket.get_ticket_types', event_id=event.id)  }}"
-                      class="btn btn-sm btn-outline-secondary border-0"
+                      class="btn btn-sm btn-outline-secondary border-0 mb-0"
                       >view</a
                     >
                     {% else %}
@@ -70,14 +70,15 @@
                   </span>
                 </p>
                 <a
-                  class="card-link"
+                  class="mb-0 mt-0 text-muted"
                   href="{{ url_for('events.user_events', username= event.organizers[0].username, page=page_num) }}"
-                  >Organized by: {{ event.organizers[0].username }}</a
+                  ><small
+                    >Organizers: {{ event.organizers[0].username }}</small
+                  ></a
                 >
-
                 <a
                   href="{{url_for('events.event_detail', event_id =event.id )}}"
-                  class="card-link"
+                  class="text-info d-block"
                   >Read more</a
                 >
               </div>
