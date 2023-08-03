@@ -33,11 +33,20 @@
       class="list-group-item list-group-item-action bg-light"
       >My tickets</a
     >
+    <a
+      href="{{ url_for('user.add_testimonial') }}"
+      class="list-group-item list-group-item-action bg-light"
+      >Talk About us</a
+    >
 
     <a href="#" class="list-group-item list-group-item-action bg-light"
       >Settings</a
     >
-    <a href="#" class="list-group-item list-group-item-action bg-light">Help</a>
+    <a
+      href="/about#contact"
+      class="list-group-item list-group-item-action bg-light"
+      >Help</a
+    >
     <a
       href="{{ url_for('user.logout')}}"
       class="list-group-item list-group-item-action bg-light"
