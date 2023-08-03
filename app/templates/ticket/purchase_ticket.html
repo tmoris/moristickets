@@ -1,23 +1,19 @@
-{% extends "base.html" %}
-{% from "error_fields.html" import render_field %}
-
-{% block content %}
+{% extends "base.html" %} {% from "error_fields.html" import render_field %} {%
+block content %}
 <div class="container">
-	<section class="w-50 m-auto">
-		<h1 class="text-center h5">{{ title }}</h1>
-		<form action="" method="POST">
-			<div class="form-group">
-				{{form.hidden_tag()}}
-			</div>
-			{{ render_field(form.ticket_type_id) }}
-			{{ render_field(form.quantity) }}
-			{{ render_field(form.amount)}}
+  <section class="w-50 m-auto mt-4 mb-4">
+    <h1 class="text-center h5">{{ title }}</h1>
+    <form action="" method="POST">
+      <div class="form-group">
+        {{form.hidden_tag()}}
+      </div>
+      {{ render_field(form.ticket_type_id) }} {{ render_field(form.quantity) }}
+      {{ render_field(form.amount)}}
 
-			<div class="form-group  d-flex  justify-content-center mb-3 mt-3">
-				{{form.submit(class="btn btn-outline-success w-50")}}
-			</div>
-		</form>
-
-	</section>
+      <div class="form-group d-flex justify-content-center mb-3 mt-3">
+        {{form.submit(class="btn btn-outline-info w-50")}}
+      </div>
+    </form>
+  </section>
 </div>
 {% endblock %}
