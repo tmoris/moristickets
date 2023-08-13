@@ -262,6 +262,7 @@ header.scrolled {
 }
 
 .logo {
+  font-size: 1.5em;
   font-weight: 500;
   color: hsl(197, 87%, 56%);
 }
