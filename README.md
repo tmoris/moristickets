@@ -1,7 +1,6 @@
 # Tibevents-Event marketing platform
 
 Welcome to the repository for my event marketing and ticketing system project. This application provides a platform for users to browse, purchase, and manage event tickets. It also includes user authentication, event creation, and testimonial submission features.
-[Video](https://youtu.be/PBEfksvN1ww)
 
 ## Table of Contents
 
